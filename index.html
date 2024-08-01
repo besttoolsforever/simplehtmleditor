@@ -1,0 +1,590 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Editor HTML</title>
+    <style>
+        body {
+            font-family: 'Helvetica Neue', Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background: linear-gradient(356deg, #3d78d2, #994acc);
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+        .light-mode {
+            background-color: #fff;
+            color: #000;
+        }
+        .dark-mode {
+            background-color: #333;
+            color: #fff;
+        }
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            height: 90vh;
+            padding: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            background-color: #cacaca;
+            border-radius: 8px;
+            transition: background-color 0.3s ease, color 0.3s ease;
+            position: relative;
+        }
+        .light-mode .container {
+            background-color: #cacaca;
+        }
+        .dark-mode .container {
+            background-color: #444;
+        }
+        .editor-container {
+            background: #cacaca;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+        .light-mode .editor-container {
+            background: #cacaca;
+        }
+        .dark-mode .editor-container {
+            background: #444;
+        }
+        .editor-buttons button {
+			font-family: monospace;
+            margin-right: 10px;
+            margin-top: 10px;
+            margin-left: 10px;
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #398be5;
+            color: #fff;
+            border: inset;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        .editor-buttons button:hover {
+            background-color: #11b5db;
+        }
+        .editor-toolbar {
+           display: flex;
+		flex-direction: row;
+		flex-wrap: wrap;
+		align-content: normal;
+		align-items: center;
+            margin-bottom: 10px;
+        }
+        .editor-toolbar select, .editor-toolbar input[type="color"], .editor-toolbar button {
+            margin-left: 10px;
+            margin-top: 10px;
+            padding: 5px;
+            font-size: 14px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            margin-right: 5px;
+            cursor: pointer;
+            background-color: #f8f8f8;
+            transition: background-color 0.3s ease;
+        }
+        .editor-toolbar button {
+            background-color: #f8f8f8;
+            border: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 10px;
+            margin-right: 5px;
+            font-size: 16px;
+            transition: background-color 0.3s ease;
+        }
+        .editor-toolbar button img {
+            width: 35px;
+            height: 35px;
+			background-color: #f8f8f8;
+            border: none;
+            justify-content: center;
+            
+            margin-right: 5px;
+            font-size: 16px;
+            transition: background-color 0.3s ease;
+		
+			margin-bottom: 10px;
+
+        }
+        .editor-toolbar button:hover {
+            background-color: #dcdcdc;
+        }
+        .editor-toolbar button:active {
+            background-color: #ccc;
+        }
+        .editor {
+            flex: 1;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            padding: 10px;
+            background-color: #dedede;
+            overflow: auto;
+            transition: background-color 0.3s ease, color 0.3s ease;
+            position: relative;
+        }
+        .light-mode .editor {
+            background-color: #dedede;
+        }
+        .dark-mode .editor {
+            background-color: #555;
+            color: #fff;
+        }
+        .editor[contenteditable="true"]:empty:before {
+            content: attr(data-placeholder);
+            color: #888;
+            position: absolute;
+            pointer-events: none;
+        }
+        .fullscreen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #fff;
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+        }
+        .fullscreen .editor-toolbar button {
+            background-color: #fff;
+        }
+        .hidden {
+            display: none;
+        }
+        #toggle-theme {
+            background-color: #434343;
+            color: #fff;
+            padding: 10px 20px;
+            border-radius: 5px;
+            border: inset;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        #toggle-theme.light-mode {
+            background-color: #fff;
+            color: #000;
+        }
+        #toggle-theme.dark-mode {
+            background-color: #333;
+            color: #fff;
+        }
+        .label1 {
+            margin-top: 13px;
+			margin-left: 5px;
+            font-weight: bold;
+            font-size: 18px;
+            color: linear-gradient(to right, #FF0000, #FF7F00, #FFFF00, #00FF00, #0000FF, #4B0082, #FF00FF);
+        }
+        .label2 {
+            margin-top: 13px;
+			margin-left: 1px;
+            font-weight: bold;
+            font-size: 18px;
+            color: #000000;
+            background: white;
+        }
+        /* Estilos para o diálogo de imagem */
+        #image-dialog, #link-dialog {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: #fff;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            z-index: 10000;
+			color: black;
+        }
+        #image-dialog .dialog-content, #link-dialog .dialog-content {
+            display: flex;
+            flex-direction: column;
+        }
+        #image-dialog input, #link-dialog input {
+            margin-bottom: 10px;
+            padding: 5px;
+            font-size: 14px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        #image-dialog button, #link-dialog button {
+			margin-top: 5px;
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #398be5;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="editor-container">
+            <div class="editor-buttons">
+                <button id="toggle-view">Visualização/Código <span>&lt;/&gt;</span></button>
+                <button id="toggle-theme">Modo Noturno</button>
+                <button id="toggle-fullscreen">Expandir Tela </button>
+                <button id="toggle-browser-fullscreen">Tela Cheia F11 <span>🔲</span></button>
+            </div>
+            <div class="editor-toolbar">
+                <select id="font-size">
+                    <option value="3">Tamanho da Fonte</option>
+                    <option value="1">Pequeno</option>
+                    <option value="2">Médio</option>
+                    <option value="3">Normal</option>
+                    <option value="4">Grande</option>
+                    <option value="5">Muito Grande</option>
+                </select>
+				<select id="font-family">
+                    <option value="">Fonte</option>
+                    <option value="Arial">Arial</option>
+                    <option value="Courier New">Courier New</option>
+                    <option value="Georgia">Georgia</option>
+                    <option value="Times New Roman">Times New Roman</option>
+                    <option value="Verdana">Verdana</option>
+                </select>
+                <label for="font-color" class="label1">AAA:</label>
+                <input type="color" id="font-color">
+                <label for="background-color" class="label2">AAA:</label>
+                <input type="color" id="background-color" value="#FFFFFF">
+                <button id="bold"><img src="bold-icon.png" alt="Negrito"></button>
+                <button id="italic"><img src="italic-icon.png" alt="Itálico"></button>
+                <button id="underline"><img src="underline-icon.png" alt="Sublinhado"></button>
+                <button id="create-link"><img src="link-icon.png" alt="Link"></button>
+				<button id="remove-link"><img src="unlink-icon.png" alt="Remover Link"></button>
+                <button id="align-left"><img src="align-left-icon.png" alt="Alinhar à Esquerda"></button>
+                <button id="align-center"><img src="align-center-icon.png" alt="Alinhar ao Centro"></button>
+                <button id="align-right"><img src="align-right-icon.png" alt="Alinhar à Direita"></button>
+                <button id="align-justify"><img src="align-justify-icon.png" alt="Justificar"></button>
+                <button id="ordered-list"><img src="ordered-list-icon.png" alt="Lista Ordenada"></button>
+                <button id="unordered-list"><img src="unordered-list-icon.png" alt="Lista Não Ordenada"></button>
+                <button id="insert-image"><img src="image-icon.png" alt="Imagem"></button>
+            </div>
+            <div id="editor" contenteditable="true" class="editor" data-placeholder="Comece a editar seu texto aqui..."></div>
+            <textarea id="html-view" class="editor hidden"></textarea>
+        </div>
+    </div>
+    <!-- Diálogo de Imagem -->
+    <div id="image-dialog" class="hidden">
+        <div class="dialog-content">
+            <label for="image-url">URL da Imagem:</label>
+            <input type="text" id="image-url" placeholder="Insira a URL da imagem">
+            <label for="image-alt">Atributo Alt:</label>
+            <input type="text" id="image-alt" placeholder="Insira o texto alternativo">
+            <label for="image-width">Largura em %:</label>
+            <input type="text" id="image-width" placeholder="Insira a largura da imagem">
+            <label for="image-height">Altura em %:</label>
+            <input type="text" id="image-height" placeholder="Insira a altura da imagem">
+            <button id="save-image">Salvar</button>
+            <button id="cancel-image">Cancelar</button>
+        </div>
+    </div>
+   <!-- Diálogo de Link -->
+ <div id="link-dialog" class="hidden">
+    <div class="dialog-content">
+        <label for="link-url">URL do Link:</label>
+        <input type="text" id="link-url" placeholder="Insira a URL do link">
+        
+        <label for="link-new-tab">
+            <input type="checkbox" id="link-new-tab"> Abrir em nova aba
+        </label>
+        <button id="save-link">Salvar</button>
+        <button id="cancel-link">Cancelar</button>
+    </div>
+</div>
+    <script>
+document.addEventListener('DOMContentLoaded', () => {
+    const editor = document.getElementById('editor');
+    const storedContent = localStorage.getItem('editorContent');
+
+    // HTML padrão
+    const defaultContent = `
+        <div class="header">
+            <img src="https://wdv.com.br/storage/2024/05/wdvblue_little.webp" alt="Logo da Empresa" style="width: 25%; height: 25%;">
+        </div>
+        <div class="hero">
+            <img src="https://wdv.com.br/storage/2024/05/websitecreation-scaled.webp" alt="Imagem de Destaque" style="width: 25%; height: 25%;">
+        </div>
+        <h1>Apresentamos Nossos Novos Produtos/Serviços</h1>
+        <p>Prezado(a) [Nome do Cliente],</p>
+        <p>Estamos entusiasmados em compartilhar com você nossas últimas novidades. Nossos produtos/serviços foram desenvolvidos para ajudar sua empresa a atingir novos níveis de sucesso e eficiência.</p>
+        <p>Confira abaixo os destaques dos nossos produtos/serviços:</p>
+        <ul>
+            <li><strong>Produto/Serviço 1:</strong> [Breve descrição do Produto/Serviço 1]</li>
+            <li><strong>Produto/Serviço 2:</strong> [Breve descrição do Produto/Serviço 2]</li>
+            <li><strong>Produto/Serviço 3:</strong> [Breve descrição do Produto/Serviço 3]</li>
+        </ul>
+        <p>Nossa equipe está à disposição para fornecer mais informações e esclarecer quaisquer dúvidas que você possa ter. Não hesite em entrar em contato conosco.</p>
+        <p>Estamos confiantes de que nossos produtos/serviços irão proporcionar benefícios significativos para a sua empresa.</p>
+        <p>Atenciosamente,<br>[Seu Nome]</p>
+        <div class="footer">
+            <img src="https://wdv.com.br/storage/2024/05/wdvblue_little.webp" alt="Logo da Empresa" style="width: 10%; height: 10%;">
+            <div class="contact-info">
+                <p><strong>Cargo:</strong> [Seu Cargo]</p>
+                <p><strong>Nome:</strong> [Seu Nome]</p>
+                <p><strong>Telefone:</strong> [Seu Telefone]</p>
+                <p><strong>Email:</strong> <a href="mailto:email@seusite.com.br">email@seusite.com.br</a></p>
+                <p><strong>Site:</strong> <a href="https://seusite.com.br">seusite.com.br</a></p>
+            </div>
+        </div>
+    `;
+
+    // Se houver conteúdo armazenado, use-o como ponto de partida
+    if (storedContent) {
+        editor.innerHTML = storedContent;
+    } else {
+        editor.innerHTML = defaultContent;
+    }
+
+    // Função para salvar o conteúdo do editor no localStorage
+    function saveEditorContent() {
+        const newContent = editor.innerHTML;
+        localStorage.setItem('editorContent', newContent);
+    }
+
+    // Exemplo de como chamar a função ao editar o conteúdo
+    editor.addEventListener('input', saveEditorContent);
+
+    const htmlView = document.getElementById('html-view');
+    const toggleViewButton = document.getElementById('toggle-view');
+    const toggleThemeButton = document.getElementById('toggle-theme');
+    const toggleFullscreenButton = document.getElementById('toggle-fullscreen');
+    const toggleBrowserFullscreenButton = document.getElementById('toggle-browser-fullscreen');
+    const imageDialog = document.getElementById('image-dialog');
+    const linkDialog = document.getElementById('link-dialog');
+    
+    const imageUrlInput = document.getElementById('image-url');
+    const imageAltInput = document.getElementById('image-alt');
+    const imageWidthInput = document.getElementById('image-width');
+    const imageHeightInput = document.getElementById('image-height');
+    const linkUrlInput = document.getElementById('link-url');
+    const linkNewTabCheckbox = document.getElementById('link-new-tab');
+    const saveImageButton = document.getElementById('save-image');
+    const cancelImageButton = document.getElementById('cancel-image');
+    const saveLinkButton = document.getElementById('save-link');
+    const cancelLinkButton = document.getElementById('cancel-link');
+    
+    let currentElement = null;
+    let range = null;
+
+    // Função para obter a posição do cursor
+    function getCaretPosition() {
+        const selection = window.getSelection();
+        if (selection.rangeCount > 0) {
+            range = selection.getRangeAt(0);
+        }
+    }
+
+    // Salvar a posição do cursor ao editar o conteúdo
+    editor.addEventListener('input', getCaretPosition);
+    editor.addEventListener('click', getCaretPosition);
+    editor.addEventListener('keyup', getCaretPosition);
+
+    editor.addEventListener('dblclick', (e) => {
+        const target = e.target;
+        if (target.tagName === 'IMG') {
+            currentElement = target;
+            imageUrlInput.value = target.src;
+            imageAltInput.value = target.alt;
+            imageWidthInput.value = target.style.width;
+            imageHeightInput.value = target.style.height;
+            imageDialog.classList.remove('hidden');
+        } else if (target.tagName === 'A') {
+            currentElement = target;
+            linkUrlInput.value = target.href;
+            linkNewTabCheckbox.checked = target.target === '_blank';
+            linkDialog.classList.remove('hidden');
+        }
+    });
+
+    document.getElementById('insert-image').addEventListener('click', () => {
+        currentElement = null;
+        imageDialog.classList.remove('hidden');
+    });
+
+    document.getElementById('create-link').addEventListener('click', () => {
+        currentElement = null;
+        linkDialog.classList.remove('hidden');
+    });
+
+    saveImageButton.addEventListener('click', () => {
+        const url = imageUrlInput.value;
+        const alt = imageAltInput.value;
+        const width = imageWidthInput.value;
+        const height = imageHeightInput.value;
+        if (currentElement && currentElement.tagName === 'IMG') {
+            currentElement.src = url;
+            currentElement.alt = alt;
+            currentElement.style.width = width;
+            currentElement.style.height = height;
+        } else {
+            const img = document.createElement('img');
+            img.src = url;
+            img.alt = alt;
+            img.style.width = width.includes('%') ? width : `${width}px`;
+            img.style.height = height.includes('%') ? height : `${height}px`;
+            if (range) {
+                range.deleteContents();
+                range.insertNode(img);
+            } else {
+                editor.appendChild(img);
+            }
+        }
+        imageDialog.classList.add('hidden');
+        imageUrlInput.value = '';
+        imageAltInput.value = '';
+        imageWidthInput.value = '';
+        imageHeightInput.value = '';
+        currentElement = null;
+    });
+
+    cancelImageButton.addEventListener('click', () => {
+        imageDialog.classList.add('hidden');
+        imageUrlInput.value = '';
+        imageAltInput.value = '';
+        imageWidthInput.value = '';
+        imageHeightInput.value = '';
+        currentElement = null;
+    });
+
+    saveLinkButton.addEventListener('click', () => {
+        const url = linkUrlInput.value;
+        const newTab = linkNewTabCheckbox.checked;
+        if (currentElement && currentElement.tagName === 'A') {
+            currentElement.href = url;
+            currentElement.target = newTab ? '_blank' : '_self';
+        } else {
+            const linkHTML = `<a href="${url}" target="${newTab ? '_blank' : '_self'}">${range.toString()}</a>`;
+            document.execCommand('insertHTML', false, linkHTML);
+        }
+        linkDialog.classList.add('hidden');
+        linkUrlInput.value = '';
+        linkNewTabCheckbox.checked = false;
+        currentElement = null;
+    });
+
+    cancelLinkButton.addEventListener('click', () => {
+        linkDialog.classList.add('hidden');
+        linkUrlInput.value = '';
+        linkNewTabCheckbox.checked = false;
+        currentElement = null;
+    });
+
+    document.getElementById('remove-link').addEventListener('click', () => {
+        document.execCommand('unlink', false, null);
+    });
+
+    toggleViewButton.addEventListener('click', () => {
+        if (htmlView.classList.contains('hidden')) {
+            htmlView.value = editor.innerHTML;
+            editor.classList.add('hidden');
+            htmlView.classList.remove('hidden');
+        } else {
+            editor.innerHTML = htmlView.value;
+            htmlView.classList.add('hidden');
+            editor.classList.remove('hidden');
+        }
+    });
+
+    toggleThemeButton.addEventListener('click', () => {
+        document.body.classList.toggle('dark-mode');
+        document.body.classList.toggle('light-mode');
+    });
+
+    toggleFullscreenButton.addEventListener('click', () => {
+        document.querySelector('.editor-container').classList.toggle('fullscreen');
+    });
+
+    toggleBrowserFullscreenButton.addEventListener('click', () => {
+        if (!document.fullscreenElement) {
+            document.documentElement.requestFullscreen();
+        } else if (document.exitFullscreen) {
+            document.exitFullscreen();
+        }
+    });
+
+    // Função para abrir o diálogo de edição de imagem
+    function openImageDialog() {
+        imageDialog.classList.remove('hidden');
+    }
+
+    // Função para abrir o diálogo de criação de link
+    function openLinkDialog() {
+        linkDialog.classList.remove('hidden');
+    }
+
+    // Função para adicionar um novo link
+    function createLink(url, newTab = false) {
+        const linkHTML = `<a href="${url}" target="${newTab ? '_blank' : '_self'}">${range.toString()}</a>`;
+        document.execCommand('insertHTML', false, linkHTML);
+    }
+document.getElementById('font-size').addEventListener('change', function() {
+        document.execCommand('fontSize', false, this.value);
+    });
+
+    document.getElementById('font-color').addEventListener('input', function() {
+        document.execCommand('foreColor', false, this.value);
+    });
+
+    document.getElementById('background-color').addEventListener('input', function() {
+        document.execCommand('hiliteColor', false, this.value);
+    });
+
+    document.getElementById('bold').addEventListener('click', function() {
+        document.execCommand('bold');
+    });
+
+    document.getElementById('italic').addEventListener('click', function() {
+        document.execCommand('italic');
+    });
+
+    document.getElementById('underline').addEventListener('click', function() {
+        document.execCommand('underline');
+    });
+
+    document.getElementById('align-left').addEventListener('click', function() {
+        document.execCommand('justifyLeft');
+    });
+
+    document.getElementById('align-center').addEventListener('click', function() {
+        document.execCommand('justifyCenter');
+    });
+
+    document.getElementById('align-right').addEventListener('click', function() {
+        document.execCommand('justifyRight');
+    });
+
+    document.getElementById('align-justify').addEventListener('click', function() {
+        document.execCommand('justifyFull');
+    });
+
+    document.getElementById('ordered-list').addEventListener('click', function() {
+        document.execCommand('insertOrderedList');
+    });
+
+    document.getElementById('unordered-list').addEventListener('click', function() {
+        document.execCommand('insertUnorderedList');
+    });
+
+    document.getElementById('font-family').addEventListener('change', function() {
+        document.execCommand('fontName', false, this.value);
+    });
+});
+</script>
+</body>
+</html>
