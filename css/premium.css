@@ -1,0 +1,454 @@
+/* Premium Modern Design System */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+:root {
+    --glass-bg: rgba(255, 255, 255, 0.75);
+    --glass-border: rgba(255, 255, 255, 0.3);
+    --glass-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
+
+    --primary: #6366f1;
+    --primary-hover: #4f46e5;
+    --text-main: #1e293b;
+    --text-muted: #64748b;
+    --bg-main: #f8fafc;
+    --toolbar-bg: rgba(255, 255, 255, 0.85);
+
+    --radius-lg: 16px;
+    --radius-md: 12px;
+    --radius-sm: 8px;
+
+    --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+body.dark-mode {
+    --glass-bg: rgba(15, 23, 42, 0.75);
+    --glass-border: rgba(255, 255, 255, 0.1);
+    --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.4);
+
+    --primary: #818cf8;
+    --primary-hover: #6366f1;
+    --text-main: #f8fafc;
+    --text-muted: #94a3b8;
+    --bg-main: #1c2638;
+    --toolbar-bg: rgba(30, 41, 59, 0.85);
+}
+
+body {
+    font-family: 'Inter', sans-serif !important;
+    background: linear-gradient(135deg, #a8c0ff 0%, #3f2b96 100%) !important;
+    background-attachment: fixed !important;
+}
+
+body.dark-mode {
+    background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 100%) !important;
+}
+
+/* Container & Editor Wrapper */
+.container {
+    background: var(--glass-bg) !important;
+    backdrop-filter: blur(16px) !important;
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid var(--glass-border) !important;
+    box-shadow: var(--glass-shadow) !important;
+    border-radius: var(--radius-lg) !important;
+    padding: 24px !important;
+    transition: var(--transition) !important;
+}
+
+.editor-container {
+    background: var(--bg-main) !important;
+    border-radius: var(--radius-md) !important;
+    overflow: hidden !important;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05) !important;
+    border: 1px solid var(--glass-border) !important;
+}
+
+/* Top Buttons Row */
+.editor-buttons {
+    background: var(--toolbar-bg) !important;
+    backdrop-filter: blur(8px) !important;
+    border-bottom: 1px solid var(--glass-border) !important;
+    padding: 12px 16px !important;
+    gap: 8px !important;
+    display: flex !important;
+    align-items: center !important;
+}
+
+.editor-buttons button {
+    font-family: 'Inter', sans-serif !important;
+    font-weight: 500 !important;
+    font-size: 13px !important;
+    color: var(--text-main) !important;
+    padding: 8px 14px !important;
+    border-radius: var(--radius-sm) !important;
+    background: transparent !important;
+    transition: var(--transition) !important;
+}
+
+.editor-buttons button:hover {
+    background: rgba(99, 102, 241, 0.1) !important;
+    color: var(--primary) !important;
+    transform: translateY(-1px) !important;
+}
+
+.editor-buttons button img {
+    margin-right: 6px !important;
+    opacity: 0.8 !important;
+}
+
+.editor-buttons .toolbar-right-action {
+    margin-left: auto !important;
+}
+
+/* SVG Icon Adaptations */
+body.dark-mode .editor-buttons button img {
+    filter: invert(1) brightness(100) opacity(0.8) !important;
+}
+
+
+
+/* Secondary Toolbar */
+.editor-toolbar {
+    background: var(--toolbar-bg) !important;
+    padding: 10px 16px !important;
+    border-bottom: 1px solid var(--glass-border) !important;
+    gap: 6px !important;
+    align-items: center !important;
+    background: rgb(255 255 255) !important;
+    background: none !important;
+}
+
+.editor-toolbar select,
+.editor-toolbar input[type="color"] {
+    font-family: 'Inter', sans-serif !important;
+    background: var(--bg-main) !important;
+    border: 1px solid var(--glass-border) !important;
+    color: var(--text-main) !important;
+    border-radius: var(--radius-sm) !important;
+    padding: 6px 10px !important;
+    height: 36px !important;
+    margin: 0 !important;
+    outline: none !important;
+    transition: var(--transition) !important;
+    cursor: pointer !important;
+}
+
+.editor-toolbar select:focus {
+    border-color: var(--primary) !important;
+    box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.2) !important;
+}
+
+.editor-toolbar input[type="color"] {
+    padding: 2px !important;
+    width: 36px !important;
+}
+
+.editor-toolbar input[type="color"]::-webkit-color-swatch-wrapper {
+    padding: 0 !important;
+}
+
+.editor-toolbar input[type="color"]::-webkit-color-swatch {
+    border: none !important;
+    border-radius: 4px !important;
+}
+
+/* Specific styling for the background color swatch to add visibility */
+#bg-color::-webkit-color-swatch {
+    border: 1px solid rgba(0, 0, 0, 0.15) !important;
+}
+
+body.dark-mode #bg-color::-webkit-color-swatch {
+    border: 1px solid rgba(255, 255, 255, 0.2) !important;
+}
+
+.editor-toolbar button,
+.label1,
+.label2 {
+    background: transparent !important;
+    border: 1px solid transparent !important;
+    border-radius: var(--radius-sm) !important;
+    width: 36px !important;
+    height: 36px !important;
+    padding: 6px !important;
+    margin: 0 !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    transition: var(--transition) !important;
+    cursor: pointer !important;
+}
+
+.label1,
+.label2 {
+    margin: 0 4px 0 10px !important;
+}
+
+.editor-toolbar button img,
+.label1 img,
+.label2 img {
+    width: 18px !important;
+    height: 18px !important;
+    margin: 0 !important;
+}
+
+.editor-toolbar button:hover,
+.label1:hover,
+.label2:hover {
+    background: rgba(99, 102, 241, 0.1) !important;
+    border-color: var(--primary) !important;
+    transform: translateY(-1px) !important;
+}
+
+.editor-toolbar button:active,
+.label1:active,
+.label2:active {
+    transform: translateY(0) !important;
+}
+
+/* Editor Area */
+.editor {
+    font-family: 'Inter', sans-serif !important;
+    font-size: 16px !important;
+    line-height: 1.6 !important;
+    color: var(--text-main) !important;
+    padding: 24px !important;
+    border: none !important;
+    border-radius: 0 0 var(--radius-md) var(--radius-md) !important;
+}
+
+.editor:focus {
+    outline: none !important;
+}
+
+/* Modals & Dialogs Enhancement */
+#image-dialog,
+#link-dialog {
+    background: rgba(0, 0, 0, 0.5) !important;
+    backdrop-filter: blur(8px) !important;
+    position: fixed !important;
+    inset: 0 !important;
+    width: 100vw !important;
+    height: 100vh !important;
+    z-index: 99999 !important;
+    border: none !important;
+    transform: none !important;
+    padding: 0 !important;
+    display: none !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+    align-items: center !important;
+    justify-content: center !important;
+}
+
+#image-dialog:not(.hidden),
+#link-dialog:not(.hidden) {
+    display: flex !important;
+}
+
+.dialog-content {
+    background: var(--bg-main) !important;
+    border: 1px solid var(--glass-border) !important;
+    border-radius: var(--radius-lg) !important;
+    padding: 32px !important;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25) !important;
+    width: 90% !important;
+    max-width: 500px !important;
+    color: var(--text-main) !important;
+    font-family: 'Inter', sans-serif !important;
+    animation: modalPop 0.3s cubic-bezier(0.34, 1.56, 0.64, 1) !important;
+    max-height: 96vh !important;
+    overflow-y: auto !important;
+}
+
+@keyframes modalPop {
+    0% {
+        transform: scale(0.9);
+        opacity: 0;
+    }
+
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+.dialog-content h3 {
+    margin-top: 0 !important;
+    margin-bottom: 24px !important;
+    font-weight: 600 !important;
+    font-size: 20px !important;
+    color: var(--text-main) !important;
+}
+
+.dialog-content label {
+    font-weight: 500 !important;
+    font-size: 14px !important;
+    color: var(--text-muted) !important;
+    margin-bottom: 6px !important;
+    display: block !important;
+}
+
+.dialog-content input[type="text"] {
+    width: 100% !important;
+    background: var(--bg-main) !important;
+    border: 1px solid var(--glass-border) !important;
+    color: var(--text-main) !important;
+    padding: 10px 14px !important;
+    border-radius: var(--radius-sm) !important;
+    font-family: 'Inter', sans-serif !important;
+    font-size: 14px !important;
+    transition: var(--transition) !important;
+    box-sizing: border-box !important;
+}
+
+.dialog-content input[type="text"]:focus {
+    border-color: var(--primary) !important;
+    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2) !important;
+    outline: none !important;
+}
+
+.dialog-content button {
+    font-family: 'Inter', sans-serif !important;
+    font-weight: 500 !important;
+    padding: 10px 20px !important;
+    border-radius: var(--radius-sm) !important;
+    transition: var(--transition) !important;
+    margin-left: 10px !important;
+}
+
+.dialog-content button[id^="save"] {
+    background: var(--primary) !important;
+    color: #fff !important;
+    border: none !important;
+}
+
+.dialog-content button[id^="save"]:hover {
+    background: var(--primary-hover) !important;
+    transform: translateY(-2px) !important;
+    box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3) !important;
+}
+
+.dialog-content button[id^="cancel"] {
+    background: transparent !important;
+    color: var(--text-main) !important;
+    border: 1px solid var(--glass-border) !important;
+}
+
+.dialog-content button[id^="cancel"]:hover {
+    background: rgba(0, 0, 0, 0.05) !important;
+}
+
+body.dark-mode .dialog-content button[id^="cancel"]:hover {
+    background: rgba(255, 255, 255, 0.05) !important;
+}
+
+/* Document Manager Enhancements */
+.editor-settings-panel {
+    background: var(--bg-main) !important;
+    border: 1px solid var(--glass-border) !important;
+    border-radius: var(--radius-lg) !important;
+    padding: 24px !important;
+    box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.15) !important;
+    font-family: 'Inter', sans-serif !important;
+}
+
+.editor-settings-panel h3 {
+    font-weight: 600 !important;
+    color: var(--text-main) !important;
+    padding-bottom: 12px !important;
+    margin-bottom: 20px !important;
+}
+
+.editor-settings-panel select,
+.editor-settings-panel input[type="text"] {
+    background: var(--bg-main) !important;
+    border: 1px solid var(--glass-border) !important;
+    color: var(--text-main) !important;
+    padding: 10px 14px !important;
+    border-radius: var(--radius-sm) !important;
+    font-family: inherit !important;
+}
+
+.editor-settings-panel button {
+    font-weight: 500 !important;
+    font-family: inherit !important;
+    border-radius: var(--radius-sm) !important;
+    transition: var(--transition) !important;
+}
+
+.editor-settings-panel .button-row {
+    flex-wrap: wrap !important;
+}
+
+.editor-settings-panel .btn-primary {
+    background: var(--primary) !important;
+}
+
+.editor-settings-panel .btn-primary:hover {
+    background: var(--primary-hover) !important;
+}
+
+/* Custom Checkbox */
+.checkbox-group input[type="checkbox"] {
+    accent-color: var(--primary) !important;
+    width: 16px !important;
+    height: 16px !important;
+}
+
+/* CTA Buttons */
+.cta-button {
+    font-family: 'Inter', sans-serif !important;
+    background: var(--bg-main) !important;
+    border: 1px solid var(--glass-border) !important;
+    color: var(--text-main) !important;
+    border-radius: var(--radius-lg) !important;
+    padding: 10px 20px !important;
+    font-weight: 500 !important;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05) !important;
+}
+
+.cta-button:hover {
+    border-color: var(--primary) !important;
+    color: var(--primary) !important;
+}
+
+/* CodeMirror surface adjustments */
+.code-editor-surface {
+    border-radius: 0 0 var(--radius-md) var(--radius-md) !important;
+    border: none !important;
+}
+
+.spacing-grid input {
+    width: 60px !important;
+}
+
+
+/* Fullscreen Fixes */
+.editor-container.fullscreen {
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 100vw !important;
+    height: 100vh !important;
+    z-index: 99999 !important;
+    margin: 0 !important;
+    border: none !important;
+    border-radius: 0 !important;
+}
+
+/* Hide the outer container when editor is fullscreen to prevent background/padding visibility */
+.container:has(.editor-container.fullscreen) {
+    padding: 0 !important;
+    margin: 0 !important;
+    max-width: none !important;
+    width: 100vw !important;
+    height: 100vh !important;
+    border: none !important;
+    background: transparent !important;
+    backdrop-filter: none !important;
+    box-shadow: none !important;
+}
+
+.editor-container.fullscreen .editor {
+    border-radius: 0 !important;
+}

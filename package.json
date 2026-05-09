@@ -1,0 +1,33 @@
+{
+  "name": "simple-html-editor",
+  "version": "1.0.0",
+  "description": "A lightweight browser-based HTML editor with visual editing, code view, local documents, and HTML/Markdown import/export.",
+  "scripts": {
+    "build": "npm run build:standalone",
+    "build:codemirror": "esbuild js/vendor/codemirror-entry.js --bundle --format=esm --platform=browser --target=es2018 --outfile=js/vendor/codemirror.bundle.js --legal-comments=none",
+    "build:standalone": "npm run build:codemirror && esbuild js/app/bootstrap.js --bundle --format=iife --platform=browser --target=es2018 --outfile=js/app/bootstrap-standalone.js --legal-comments=none",
+    "serve": "node tests/e2e/static-server.mjs",
+    "test": "npm run build:standalone && npm run test:unit && npm run test:e2e",
+    "test:unit": "node js/tests/core-smoke.test.mjs",
+    "test:e2e": "playwright test"
+  },
+  "keywords": [
+    "html-editor",
+    "wysiwyg",
+    "markdown",
+    "codemirror",
+    "static-site"
+  ],
+  "author": "",
+  "license": "ISC",
+  "type": "module",
+  "devDependencies": {
+    "@playwright/test": "^1.58.2",
+    "esbuild": "^0.25.4"
+  },
+  "dependencies": {
+    "@codemirror/lang-html": "^6.4.11",
+    "@lezer/highlight": "^1.2.3",
+    "codemirror": "^6.0.2"
+  }
+}

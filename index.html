@@ -6,23 +6,44 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>HTML Editor</title>
     <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/premium.css">
 </head>
 
 <body>
     <div class="container">
         <div class="editor-container">
-            <div class="editor-buttons">
-                <button id="toggle-view"><img src="assets/eye-fill.svg" alt="Preview" id="toggle-view-button">
-                    Preview</button>
-                <button id="toggle-theme"><img src="assets/moon-fill.svg" alt="Dark Mode"> Dark Mode</button>
-                <button id="toggle-fullscreen"><img src="assets/aspect-ratio.svg" alt="Expand Screen"> Expand
-                    Screen</button>
-                <button id="toggle-browser-fullscreen"><img src="assets/arrows-fullscreen.svg" alt="Full Screen (F11)">
-                    Full Screen (F11)</button>
-                <button id="toggle-settings"><img src="assets/settings.svg" alt="Settings"> Settings</button>
+            <div class="editor-buttons" role="toolbar" aria-label="Editor actions">
+                <button id="toggle-view" aria-label="Toggle code view" aria-pressed="false">
+                    <img src="assets/eye-fill.svg" alt="Preview" id="toggle-view-button">
+                    <span class="btn-label-text">Preview</span>
+                </button>
+                <button id="toggle-theme" aria-label="Toggle dark mode" aria-pressed="false">
+                    <img src="assets/moon-fill.svg" alt="Dark Mode">
+                    <span class="btn-label-text">Dark Mode</span>
+                </button>
+                <button id="toggle-fullscreen" aria-label="Toggle editor fullscreen" aria-pressed="false">
+                    <img src="assets/aspect-ratio.svg" alt="Expand Screen">
+                    <span class="btn-label-text">Expand Screen</span>
+                </button>
+                <button id="toggle-browser-fullscreen" aria-label="Toggle browser fullscreen" aria-pressed="false">
+                    <img src="assets/arrows-fullscreen.svg" alt="Full Screen (F11)">
+                    <span class="btn-label-text">Full Screen (F11)</span>
+                </button>
+                <button id="toggle-documents" aria-label="Open document manager" aria-controls="document-manager-panel" aria-expanded="false">
+                    <img src="assets/disket.svg" alt="Documents">
+                    <span class="btn-label-text">Documents</span>
+                </button>
+                <button id="toggle-settings" aria-label="Open settings panel" aria-controls="editor-settings-panel" aria-expanded="false">
+                    <img src="assets/settings.svg" alt="Settings">
+                    <span class="btn-label-text">Settings</span>
+                </button>
+                <button id="export-file" class="toolbar-right-action" aria-label="Export current document">
+                    <img src="assets/download.svg" alt="Export File">
+                    <span class="btn-label-text">Export</span>
+                </button>
             </div>
-            <div class="editor-toolbar">
-                <select id="font-family">
+            <div class="editor-toolbar" role="toolbar" aria-label="Formatting toolbar">
+                <select id="font-family" aria-label="Font family">
                     <option value="">Font</option>
                     <option value="Arial">Arial</option>
                     <option value="Courier New">Courier New</option>
@@ -30,7 +51,7 @@
                     <option value="Times New Roman">Times New Roman</option>
                     <option value="Verdana">Verdana</option>
                 </select>
-                <select id="font-size" class="form-control">
+                <select id="font-size" class="form-control" aria-label="Font size">
                     <option value="12px">12px</option>
                     <option value="14px">14px</option>
                     <option value="16px">16px</option>
@@ -40,35 +61,40 @@
                     <option value="28px">28px</option>
                 </select>
                 <label for="font-color" class="label1"><img src="assets/palette-fill.svg" alt="Text Color"></label>
-                <input type="color" id="font-color" class="btn btn-light" value="#000000"
-                    onchange="changeFontColor(this.value)">
+                <input type="color" id="font-color" class="btn btn-light" value="#000000" aria-label="Text color">
                 <label for="bg-color" class="label2"><img src="assets/highlighter.svg" alt="Background Color"></label>
-                <input type="color" id="bg-color" class="btn btn-light" value="#ffffff"
-                    onchange="changeBackgroundColor(this.value)">
-                <button onclick="formatText('bold')"><img src="assets/type-bold.svg" alt="Bold"></button>
-                <button onclick="formatText('italic')"><img src="assets/type-italic.svg" alt="Italic"></button>
-                <button onclick="formatText('underline')"><img src="assets/type-underline.svg" alt="Underline"></button>
-                <button onclick="formatText('justifyLeft')"><img src="assets/text-left.svg" alt="Align Left"></button>
-                <button onclick="formatText('justifyCenter')"><img src="assets/text-center.svg" alt="Center"></button>
-                <button onclick="formatText('justifyRight')"><img src="assets/text-right.svg"
+                <input type="color" id="bg-color" class="btn btn-light" value="#ffffff" aria-label="Highlight color">
+                <button data-command="bold" aria-label="Bold"><img src="assets/type-bold.svg" alt="Bold"></button>
+                <button data-command="italic" aria-label="Italic"><img src="assets/type-italic.svg"
+                        alt="Italic"></button>
+                <button data-command="underline" aria-label="Underline"><img src="assets/type-underline.svg"
+                        alt="Underline"></button>
+                <button data-command="justifyLeft" aria-label="Align left"><img src="assets/text-left.svg"
+                        alt="Align Left"></button>
+                <button data-command="justifyCenter" aria-label="Align center"><img src="assets/text-center.svg"
+                        alt="Center"></button>
+                <button data-command="justifyRight" aria-label="Align right"><img src="assets/text-right.svg"
                         alt="Align Right"></button>
-                <button onclick="formatText('justifyFull')"><img src="assets/justify.svg" alt="Justify"></button>
-                <button onclick="formatText('insertOrderedList')"><img src="assets/list-ol.svg"
+                <button data-command="justifyFull" aria-label="Justify"><img src="assets/justify.svg"
+                        alt="Justify"></button>
+                <button data-command="insertOrderedList" aria-label="Ordered list"><img src="assets/list-ol.svg"
                         alt="Ordered List"></button>
-                <button onclick="formatText('insertUnorderedList')"><img src="assets/list-ul.svg"
+                <button data-command="insertUnorderedList" aria-label="Unordered list"><img src="assets/list-ul.svg"
                         alt="Unordered List"></button>
-                <button id="insert-image"><img src="assets/image.svg" alt="Insert Image"></button>
-                <button id="create-link"><img src="assets/link.svg" alt="Link"></button>
-                <button id="removeLink" class="btn btn-light" onclick="formatText('unlink')"><img
+                <button id="insert-image" aria-label="Insert image"><img src="assets/image.svg"
+                        alt="Insert Image"></button>
+                <button id="create-link" aria-label="Create link"><img src="assets/link.svg" alt="Link"></button>
+                <button id="removeLink" class="btn btn-light" data-command="unlink" aria-label="Remove link"><img
                         src="assets/unlink.svg" alt="Remove Link"></button>
-                <button id="print"><img src="assets/printer.svg" alt="Print"></button>
+                <button id="print" aria-label="Print document"><img src="assets/printer.svg" alt="Print"></button>
 
             </div>
-            <div id="editor" class="editor" contenteditable="true" data-placeholder="Type your text here...">
+            <div id="editor" class="editor" contenteditable="true" role="textbox" aria-multiline="true"
+                aria-label="Rich text editor" data-placeholder="Type your text here...">
             </div>
             <div class="button-group">
-                <button class="cta-button" id="copyCodeButton">
-                    <span class="btn-text">Copy Code</span>
+                <button class="cta-button" id="copyCodeButton" aria-label="Copy HTML code">
+                    <span class="btn-text">Code</span>
                     <svg class="btn-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="20" height="20"
                         fill="currentColor">
                         <path
@@ -80,8 +106,8 @@
                     </svg>
                 </button>
 
-                <button class="cta-button" id="copyContentButton">
-                    <span class="btn-text">Copy Content</span>
+                <button class="cta-button" id="copyContentButton" aria-label="Copy formatted content">
+                    <span class="btn-text">Content</span>
                     <svg class="btn-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="20" height="20"
                         fill="currentColor">
                         <path
@@ -92,14 +118,43 @@
                         <path d="M9 16.2L4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4L9 16.2z" />
                     </svg>
                 </button>
+            </div>
+
+            <!-- Document Manager Panel -->
+            <div id="document-manager-panel" class="editor-settings-panel" role="dialog" aria-modal="false"
+                aria-labelledby="document-manager-title" aria-hidden="true">
+                <h3 id="document-manager-title">Document Manager</h3>
+
+                <label for="doc-name-input">Document Name</label>
+                <input type="text" id="doc-name-input" placeholder="Enter document name" aria-label="Document name">
+
+                <label for="doc-list-select">Load Document</label>
+                <select id="doc-list-select" aria-label="Document list">
+                    <!-- Populated dynamically -->
+                </select>
+
+                <div class="button-row">
+                    <button id="doc-new-btn" class="btn-primary" aria-label="Create new document">New Document</button>
+                    <button id="doc-save-btn" class="btn-success" aria-label="Save current document">Save Now</button>
+                    <button id="doc-import-btn" class="btn-primary" aria-label="Import HTML or Markdown file">Import File</button>
+                </div>
+
+                <button id="doc-delete-btn" class="btn-danger btn-block" aria-label="Delete current document">Delete
+                    Document</button>
+
+                <label class="checkbox-group">
+                    <input type="checkbox" id="doc-autosave-toggle" checked>
+                    <span>Enable Auto-Save</span>
+                </label>
             </div>
         </div>
     </div>
 
     <!-- Image Dialog -->
-    <div id="image-dialog" class="hidden">
+    <div id="image-dialog" class="hidden" role="dialog" aria-modal="true" aria-labelledby="image-dialog-title"
+        aria-hidden="true">
         <div class="dialog-content" style="min-width: 400px; max-width: 500px;">
-            <h3 style="margin-top: 0;">Image Settings</h3>
+            <h3 id="image-dialog-title" style="margin-top: 0;">Image Settings</h3>
             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px;">
                 <div style="grid-column: span 2;">
                     <label for="image-url">Image URL:</label>
@@ -129,8 +184,9 @@
 
             <!-- Spacing Section with Toggle -->
             <div style="margin-bottom: 10px;">
-                <button type="button" class="toggle-spacing-btn" id="toggle-spacing-btn">
-                    ▼ Show Spacing (Margin/Padding)
+                <button type="button" class="toggle-spacing-btn" id="toggle-spacing-btn" aria-controls="spacing-content"
+                    aria-expanded="false">
+                    Show Spacing (Margin/Padding)
                 </button>
             </div>
 
@@ -172,8 +228,10 @@
     </div>
 
     <!-- Link Dialog -->
-    <div id="link-dialog" class="hidden">
+    <div id="link-dialog" class="hidden" role="dialog" aria-modal="true" aria-labelledby="link-dialog-title"
+        aria-hidden="true">
         <div class="dialog-content">
+            <h3 id="link-dialog-title">Link Settings</h3>
             <label for="link-url">Link URL:</label>
             <input type="text" id="link-url" placeholder="Enter link URL">
 
@@ -184,8 +242,32 @@
             <button id="cancel-link">Cancel</button>
         </div>
     </div>
-    <script src="js/code-view.js"></script>
-    <script src="js/script.js"></script>
+
+    <div id="app-status-region" class="app-status-region" role="status" aria-live="polite" aria-atomic="true"></div>
+    <input type="file" id="file-import-input" accept=".html,.htm,.md,.markdown,.mdown,.mkd,text/html,text/markdown" hidden>
+
+    <script>
+        (async () => {
+            const isFileProtocol = window.location.protocol === 'file:';
+
+            if (isFileProtocol) {
+                const fallbackScript = document.createElement('script');
+                fallbackScript.src = 'js/app/bootstrap-standalone.js';
+                fallbackScript.defer = true;
+                fallbackScript.onerror = () => {
+                    console.error('[BootstrapLoader] Failed to load standalone bootstrap bundle.');
+                };
+                document.body.appendChild(fallbackScript);
+                return;
+            }
+
+            try {
+                await import('./js/app/bootstrap.js');
+            } catch (error) {
+                console.error('[BootstrapLoader] Failed to load module bootstrap.', error);
+            }
+        })();
+    </script>
 </body>
 
 </html>
