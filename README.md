@@ -1,6 +1,7 @@
 # Simple HTML Editor
 
 A lightweight browser-based HTML editor with visual editing, CodeMirror source view, local document management, and HTML/Markdown import/export.
+Web version available at: https://besttoolsforever.github.io/simplehtmleditor/
 
 ## Features
 
@@ -49,6 +50,3 @@ tests/e2e/           Playwright tests and static test server
 
 Imported, stored, and code-view HTML is normalized through the editor sanitizer. The sanitizer removes script-capable tags, event attributes, unsafe URL schemes, and unsupported inline CSS before content is saved or rendered back into visual mode.
 
-## Preparing For GitHub
-
-Generated and local-only folders such as `node_modules/`, `playwright-report/`, `test-results/`, and `coverage/` are ignored by `.gitignore`. Commit the source files, `package.json`, `package-lock.json`, generated standalone bundles, and documentation.
